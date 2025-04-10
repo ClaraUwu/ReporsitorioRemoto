@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -22,7 +23,7 @@ public class UsuarioBean {
 	private Long id;
 	
     @Email(message = "El correo electronico debe ser valido")
-    @NotBlank(message = "El correo electrónico no puede estar vacio")
+    @NotBlank(message = "El correo electronico no puede estar vacio")
 	@Column(unique = true, nullable = false)
 	private String email;
     
@@ -64,8 +65,5 @@ public class UsuarioBean {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
 
-	
 }
