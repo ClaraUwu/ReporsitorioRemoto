@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 import mx.edu.uacm.ws.rest.bean.UsuarioBean;
 import mx.edu.uacm.ws.rest.repository.UsuarioRepository;
 
+/**
+ * Servicio DAO para la gestión de usuarios.
+ */
 @Component
 public class UsuarioDaoService {
 	
@@ -13,6 +16,14 @@ public class UsuarioDaoService {
 	private UsuarioRepository usuarioRepository;
 	
 	public UsuarioBean registrarUsuario(UsuarioBean usuario) {
+		 if (usuario == null || usuario.getEmail() == null || !usuario.getEmail().contains("@")) {
+	            throw new IllegalArgumentException("Email invalido");
+	        }
+
+	        if (usuario.getPassword() == null || usuario.getPassword().length() < 8) {
+	            throw new IllegalArgumentException("La contrasena debe tener al menos 8 caracteres");
+	        }
+	        
 		return usuarioRepository.save(usuario);	
 	}
 	
