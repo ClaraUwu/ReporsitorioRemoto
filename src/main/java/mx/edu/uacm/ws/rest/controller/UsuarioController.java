@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import mx.edu.uacm.ws.rest.bean.UsuarioBean;
 import mx.edu.uacm.ws.rest.dao.UsuarioDaoService;
 
+/**
+ * Controlador REST para las operaciones con usuarios.
+ */
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
@@ -22,11 +25,23 @@ public class UsuarioController {
 		this.service = service;
 	} 
 	
+	/**
+     * Registra un nuevo usuario.
+     *
+     * @param usuarioBean Objeto del usuario a registrar.
+     * @return Usuario registrado o error.
+     */
 	@PostMapping("/registro")
 	public UsuarioBean registrarUsuario(@RequestBody UsuarioBean usuarioBean ) {
 		return service.registrarUsuario(usuarioBean);
 	}
 	
+      /**
+       * Busca un usuario por email.
+       *
+       * @param email Email a buscar.
+       * @return Usuario encontrado o vacío.
+       */
 	@GetMapping("/{email}")
 	public Optional<UsuarioBean> buscarUsuario(@PathVariable String email){
 		return service.buscarPorEmail(email);
