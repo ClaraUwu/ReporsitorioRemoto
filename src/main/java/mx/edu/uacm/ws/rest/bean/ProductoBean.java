@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 
 /**
@@ -22,6 +23,7 @@ public class ProductoBean {
 	private Long id;
 	
 	@NotBlank(message = "El nombre del producto no puede estar vacio")
+	@Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{2,50}$", message = "Nombre invalido")
 	private String nombre;
 	
 	@NotNull(message = "El precio no puede ser nulo")
