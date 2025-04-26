@@ -1,7 +1,5 @@
 package mx.edu.uacm.ws.rest.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +48,8 @@ public class UsuarioController {
 	@GetMapping("/{email}")
 	public ResponseEntity<?> buscarUsuario(@PathVariable String email){
 		return service.buscarPorEmail(email)
-				.map(ResponseEntity::ok)
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.<ResponseEntity<?>>map(ResponseEntity::ok)
+				.orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body("Usuario No Encontrado. Intente Registrarse."));
 	}
 	
