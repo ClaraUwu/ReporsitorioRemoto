@@ -3,7 +3,8 @@ package mx.edu.uacm.ws.rest.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +36,9 @@ public class UsuarioController {
      * @return Usuario registrado o error.
      */
 	@PostMapping("/registro")
-	public UsuarioBean registrarUsuario(@RequestBody UsuarioBean usuarioBean ) {
-		return service.registrarUsuario(usuarioBean);
+	public ResponseEntity<UsuarioBean> registrarUsuario(@RequestBody UsuarioBean usuarioBean ) {
+		UsuarioBean creado = service.registrarUsuario(usuarioBean);
+		return ResponseEntity.status(HttpStatus.CREATED).body(creado);
 	}
 	
       /**
@@ -46,8 +48,11 @@ public class UsuarioController {
        * @return Usuario encontrado o vacío.
        */
 	@GetMapping("/{email}")
-	public Optional<UsuarioBean> buscarUsuario(@PathVariable String email){
-		return service.buscarPorEmail(email);
+	public ResponseEntity<?> buscarUsuario(@PathVariable String email){
+		return service.buscarPorEmail(email)
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body("Usuario No Encontrado. Intente Registrarse."));
 	}
 	
 }
