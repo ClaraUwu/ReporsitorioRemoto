@@ -6,6 +6,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+
+/**
+ * Entidad que representa un producto dentro del sistema.
+ */
 @Entity
 @Table(name = "productos")
 public class ProductoBean {
@@ -13,7 +21,13 @@ public class ProductoBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank(message = "El nombre del producto no puede estar vacio")
+	@Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{2,50}$", message = "Nombre invalido")
 	private String nombre;
+	
+	@NotNull(message = "El precio no puede ser nulo")
+	@Positive(message = "El precio debe ser un valor positivo")
 	private Double precio;
 	
 	public ProductoBean() {
