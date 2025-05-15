@@ -1,5 +1,9 @@
 package mx.edu.uacm.ws.rest.controller;
 
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +24,8 @@ import mx.edu.uacm.ws.rest.dao.UsuarioDaoService;
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
+	
 	@Autowired
 	private UsuarioDaoService service;
 
@@ -34,8 +40,10 @@ public class UsuarioController {
      * @return Usuario registrado o error.
      */
 	@PostMapping("/registro")
-	public ResponseEntity<UsuarioBean> registrarUsuario(@RequestBody UsuarioBean usuarioBean ) {
+	public ResponseEntity<UsuarioBean> registrarUsuario(@RequestBody UsuarioBean usuarioBean) {
+		logger.debug("Solicitud POST /registro recibida");
 		UsuarioBean creado = service.registrarUsuario(usuarioBean);
+		logger.debug("Respuesta POST /registro enviada");
 		return ResponseEntity.status(HttpStatus.CREATED).body(creado);
 	}
 	
@@ -46,11 +54,17 @@ public class UsuarioController {
        * @return Usuario encontrado o vacío.
        */
 	@GetMapping("/{email}")
-	public ResponseEntity<?> buscarUsuario(@PathVariable String email){
-		return service.buscarPorEmail(email)
-				.<ResponseEntity<?>>map(ResponseEntity::ok)
-				.orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body("Usuario No Encontrado. Intente Registrarse."));
+	public ResponseEntity<?> buscarUsuario(@PathVariable String email) {
+		logger.debug("Solicitud GET /{} recibida", email);
+		Optional<UsuarioBean> usuario = service.buscarPorEmail(email);
+
+		if (usuario.isPresent()) {
+			logger.info("Usuario consultado: {}", email);
+			return ResponseEntity.ok(usuario.get());
+		} else {
+			logger.warn("Usuario no encontrado con email: {}", email);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario No Encontrado. Intente Registrarse.");
+		}
 	}
 	
 }
